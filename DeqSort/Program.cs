@@ -166,23 +166,20 @@ namespace DeqSort
 
             return result.Substring(0, result.Length - 1);
         }
-    }
 
-    internal class Node<T>
-    {
-        private T _Number;
-        private Node<T> _Next;
-        private Node<T> _Prev;
-        public T Value { get { return _Number; } set { _Number = value; } }
-
-        public Node(T Number)
+        internal class Node<TValue>
         {
-            this._Number = Number;
-        }
+            public Node(TValue value)
+            {
+                Value = value;
+            }
 
-        public Node<T> Next { get { return this._Next; } set { this._Next = value; } }
-        public Node<T> Prev { get { return this._Prev; } set { this._Prev = value; } }
+            public TValue Value { get; set; }
+            public Node<TValue> Next { get; set; }
+            public Node<TValue> Prev { get; set; }
+        }
     }
+
 
     internal class Program
     {
