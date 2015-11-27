@@ -181,8 +181,17 @@ namespace DeqSort
             // Создаём, сортируем и выводим деку
             //Console.WriteLine(PrintArray(BinarySorting(RandomArray(1000))) + "\n");
 
-            // Создаём, сортируем и выводим деку
-            Console.WriteLine(PrintArray(BinarySorting(RandomArray(1000))) + "\n");
+            // разогрев
+            // в управляемых средах типа Java/.NET надо вызвать все функции до теста чтобы они скомпилировались JIT компилятором
+            Measure(String.Empty, () => BinarySorting(RandomArray(100)), true);
+
+            var deq = RandomArray(1000);
+            
+            // тест
+            Measure("BinarySort", () => BinarySorting(deq));
+
+            // выводим деку
+            Console.WriteLine(PrintArray(deq));
 
             // Держим окно открытым
             Console.ReadLine();
@@ -223,6 +232,16 @@ namespace DeqSort
             return result.Substring(0, result.Length - 1);
         }
 
+
+        private static void Measure(string name, Action action, bool silent = false)
+        {
+            Stopwatch stopWatch = Stopwatch.StartNew();
+            action();
+            stopWatch.Stop();
+            if (!silent)
+                Console.WriteLine("{0} заняло {1} милисекунд", name, stopWatch.Elapsed);
+        }
+
         /// <summary>
         /// Сортировать деку
         /// </summary>
@@ -230,7 +249,6 @@ namespace DeqSort
         /// <returns>Отсортированная дека Deq<T></returns>
         private static Deq<int> BinarySorting(Deq<int> unsortedArray)
         {
-            Stopwatch stopWatch = Stopwatch.StartNew();
             for (var i = 1; i < unsortedArray.Count; i++) {
                 Console.WriteLine("Выполнено " + i + " из " + unsortedArray.Count + "("
                                   + i / (unsortedArray.Count / 100) + "%)");
@@ -242,8 +260,6 @@ namespace DeqSort
 
                 unsortedArray[ins] = tmp;
             }
-            stopWatch.Stop();
-            Console.WriteLine("Прошло " + stopWatch.Elapsed + "милисекунд");
 
             return unsortedArray;
         }
