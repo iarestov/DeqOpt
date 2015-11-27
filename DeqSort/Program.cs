@@ -148,6 +148,24 @@ namespace DeqSort
             for (var i = 0; i <= position; i++)
                 PushFront(PopBack());
         }
+
+
+        public override string ToString()
+        {
+            string result = "";
+            var count = Count;
+
+            for (var i = 0; i < count; i++)
+            {
+                PushBack(PopFront());
+                result += Front + ",";
+            }
+
+            for (var i = 0; i < count; i++)
+                PushFront(PopBack());
+
+            return result.Substring(0, result.Length - 1);
+        }
     }
 
     internal class Node<T>
@@ -191,7 +209,7 @@ namespace DeqSort
             Measure("BinarySort", () => BinarySorting(deq));
 
             // выводим деку
-            Console.WriteLine(PrintArray(deq));
+            Console.WriteLine(deq);
 
             // Держим окно открытым
             Console.ReadLine();
@@ -211,26 +229,6 @@ namespace DeqSort
             return deq;
         }
 
-        /// <summary>
-        /// Сформировать строку представляющую массив
-        /// </summary>
-        /// <param name="sortedArray">Дек</param>
-        /// <returns>Строка из массива</returns>
-        private static string PrintArray(Deq<int> sortedArray)
-        {
-            string result = "";
-            var count = sortedArray.Count;
-
-            for (var i = 0; i < count; i++) {
-                sortedArray.PushBack(sortedArray.PopFront());
-                result += sortedArray.Front + ",";
-            }
-
-            for (var i = 0; i < count; i++)
-                sortedArray.PushFront(sortedArray.PopBack());
-
-            return result.Substring(0, result.Length - 1);
-        }
 
 
         private static void Measure(string name, Action action, bool silent = false)
