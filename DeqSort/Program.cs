@@ -11,28 +11,28 @@ namespace DeqSort
     internal class Deq<T>
     {
         private Node<T> _front;
-        private Node<T> Current;
+        private Node<T> _current;
         private Node<T> _back;
-        private int size = 0;
+        private int _size = 0;
 
         /// <summary>
         /// Контруктор
         /// </summary>
         public Deq()
         {
-            size = 0;
-            _front = Current = _back = null;
+            _size = 0;
+            _front = _current = _back = null;
         }
 
         /// <summary>
         /// Количество элементов в деке
         /// </summary>
-        public int Count { get { return size; } }
+        public int Count { get { return _size; } }
 
         /// <summary>
         /// Пуста ли дека
         /// </summary>
-        public bool Empty { get { return size == 0; } }
+        public bool Empty { get { return _size == 0; } }
 
         /// <summary>
         /// Посмотреть на элемент в начале деки
@@ -74,7 +74,7 @@ namespace DeqSort
                 _back.Next = node;
                 _back = node;
             }
-            size++;
+            _size++;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace DeqSort
                 _front.Prev = node;
                 _front = node;
             }
-            size++;
+            _size++;
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace DeqSort
             if (_front != _back)
                 _back.Prev.Next = null;
             _back = _back.Prev;
-            size--;
+            _size--;
             return item;
         }
 
@@ -118,7 +118,7 @@ namespace DeqSort
             if (_front != _back)
                 _front.Next.Prev = null;
             _front = _front.Next;
-            size--;
+            _size--;
             return item;
         }
 
