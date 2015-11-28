@@ -172,19 +172,22 @@ namespace DeqSort
 
         public override string ToString()
         {
-            string result = "";
-            var count = Count;
+            var sb = new StringBuilder();
 
-            for (var i = 0; i < count; i++)
-            {
-                PushBack(PopFront());
-                result += Front + ",";
+            var n = _head.Next;
+
+            while (n != _head) {
+
+                if (sb.Length > 0) {
+                    sb.Append(", ");
+                }
+
+                sb.Append(n.Value);
+
+                n = n.Next;
             }
 
-            for (var i = 0; i < count; i++)
-                PushFront(PopBack());
-
-            return result.Substring(0, result.Length - 1);
+            return sb.ToString();
         }
 
         internal class Node<TValue>
