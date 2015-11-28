@@ -222,13 +222,13 @@ namespace DeqSort
                                   + (double)i / (
 (double)unsortedArray.Count / 100) + "%)");
 
-                var ins = BinarySearch(unsortedArray, 0, i, unsortedArray[i]);
-                var tmp = unsortedArray[i];
-
+                var current = unsortedArray[i];
+                var ins = BinarySearch(unsortedArray, 0, i, current);
+                
                 for (var j = i - 1; j >= ins; j--)
                     unsortedArray[j + 1] = unsortedArray[j];
-                
-                unsortedArray[ins] = tmp;
+
+                unsortedArray[ins] = current;
             }
 
             return unsortedArray;
@@ -249,9 +249,10 @@ namespace DeqSort
 
             var mid = low + ((high - low) / 2);
 
-            if (key > array[mid])
+            var current = array[mid];
+            if (key > current)
                 return BinarySearch(array, mid + 1, high, key);
-            else if (key < array[mid])
+            else if (key < current)
                 return BinarySearch(array, low, mid, key);
 
             return mid;
