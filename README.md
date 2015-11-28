@@ -1,0 +1,2 @@
+# DeqOpt
+help with homework
