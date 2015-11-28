@@ -11,7 +11,7 @@ namespace Test.DeqSort
         public void TestEmpty()
         {
             var d = new Deq<int>();
-            Sorter.Sort(d);
+            Sorter.Sort2(d);
             Assert.IsTrue(d.Empty);
             Assert.AreEqual(0, d.Count);
         }
@@ -22,7 +22,7 @@ namespace Test.DeqSort
             const int val = 100500;
             var d = new Deq<int>();
             d.PushBack(val);
-            Sorter.Sort(d);
+            Sorter.Sort2(d);
             Assert.IsFalse(d.Empty);
 
             Assert.AreEqual(1, d.Count);
@@ -37,7 +37,7 @@ namespace Test.DeqSort
             var d = new Deq<int>();
             d.PushBack(val1);
             d.PushBack(val2);
-            d = Sorter.Sort(d);
+            d = Sorter.Sort2(d);
 
             Assert.IsFalse(d.Empty);
             Assert.AreEqual(2, d.Count);
@@ -56,7 +56,7 @@ namespace Test.DeqSort
             d.PushBack(val2);
             d.PushBack(val3);
             d.PushBack(val1);
-            d = Sorter.Sort(d);
+            d = Sorter.Sort2(d);
 
             Assert.IsFalse(d.Empty);
             Assert.AreEqual(3, d.Count);
@@ -76,7 +76,7 @@ namespace Test.DeqSort
                 d.PushBack(v);
             }
 
-            d = Sorter.Sort(d);
+            d = Sorter.Sort2(d);
 
             Assert.IsFalse(d.Empty);
             Assert.AreEqual(data.Length, d.Count);
@@ -101,7 +101,7 @@ namespace Test.DeqSort
                 d.PushBack(v);
             }
 
-            d = Sorter.Sort(d);
+            d = Sorter.Sort2(d);
 
             Assert.IsFalse(d.Empty);
             Assert.AreEqual(data.Length, d.Count);

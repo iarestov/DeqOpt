@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -234,6 +236,46 @@ namespace DeqSort
             return unsortedArray;
         }
 
+        public static Deq<int> Sort2(Deq<int> unsortedArray)
+        {
+            if (unsortedArray.Count > 1) {
+                QSort(unsortedArray, 0, unsortedArray.Count-1);
+            }
+            return unsortedArray;
+        }
+
+        private static void QSort(Deq<int> array, int lo, int hi)
+        {
+            if (lo < hi) {
+                var p = QSortPartition(array, lo, hi);
+                QSort(array, lo, p);
+                QSort(array, p + 1, hi);
+            }
+        }
+
+        private static int QSortPartition(Deq<int> array, int lo, int hi)
+        {
+            var pivot = array[lo];
+            var i = lo - 1;
+            var j = hi + 1;
+            for (;;) {
+                do {
+                    j--;
+                } while (array[j] > pivot);
+                do {
+                    i++;
+                } while (array[i] < pivot);
+                if (i < j) {
+                    var t = array[i];
+                    array[i] = array[j];
+                    array[j] = t;
+                } else {
+                    return j;
+                }
+            }
+
+        }
+
         /// <summary>
         /// Бинарный поиск подходящей позиции элемента в массиве
         /// </summary>
@@ -277,12 +319,12 @@ namespace DeqSort
 
             // разогрев
             // в управляемых средах типа Java/.NET надо вызвать все функции до теста чтобы они скомпилировались JIT компилятором
-            Measure(String.Empty, () => Sorter.Sort(RandomArray(100)), true);
+            Measure(String.Empty, () => Sorter.Sort2(RandomArray(100)), true);
 
             var deq = RandomArray(1000);
             
             // тест
-            Measure("BinarySort", () => Sorter.Sort(deq));
+            Measure("BinarySort", () => Sorter.Sort2(deq));
 
             // выводим деку
             Console.WriteLine(deq);
