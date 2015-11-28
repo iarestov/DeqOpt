@@ -10,9 +10,9 @@ namespace DeqSort
 
     internal class Deq<T>
     {
-        private Node<T> First;
+        private Node<T> _front;
         private Node<T> Current;
-        private Node<T> Last;
+        private Node<T> _back;
         private int size = 0;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace DeqSort
         public Deq()
         {
             size = 0;
-            First = Current = Last = null;
+            _front = Current = _back = null;
         }
 
         /// <summary>
@@ -38,13 +38,27 @@ namespace DeqSort
         /// Посмотреть на элемент в начале деки
         /// </summary>
         /// <returns>(T)Элемент</returns>
-        public T Front { get { return First.Value; } }
+        public T Front
+        {
+            get
+            {
+                if (_front == null) throw new InvalidOperationException();
+                return _front.Value;
+            }
+        }
 
         /// <summary>
         /// Посмотреть на элемент в конце деки
         /// </summary>
         /// <returns>(T)Элемент</returns>
-        public T Back { get { return Last.Value; } }
+        public T Back
+        {
+            get
+            {
+                if (_back == null) throw new InvalidOperationException();
+                return _back.Value;
+            }
+        }
 
         /// <summary>
         /// Вставить элемент в конец деки
@@ -53,12 +67,12 @@ namespace DeqSort
         public void PushBack(T item)
         {
             var node = new Node<T>(item);
-            if (Last == null && First == null)
-                Last = First = node;
+            if (_back == null && _front == null)
+                _back = _front = node;
             else {
-                node.Prev = Last;
-                Last.Next = node;
-                Last = node;
+                node.Prev = _back;
+                _back.Next = node;
+                _back = node;
             }
             size++;
         }
@@ -70,12 +84,12 @@ namespace DeqSort
         public void PushFront(T item)
         {
             var node = new Node<T>(item);
-            if (Last == null && First == null)
-                Last = First = node;
+            if (_back == null && _front == null)
+                _back = _front = node;
             else {
-                node.Next = First;
-                First.Prev = node;
-                First = node;
+                node.Next = _front;
+                _front.Prev = node;
+                _front = node;
             }
             size++;
         }
@@ -86,10 +100,10 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public T PopBack()
         {
-            var item = Last.Value;
-            if (First != Last)
-                Last.Prev.Next = null;
-            Last = Last.Prev;
+            var item = _back.Value;
+            if (_front != _back)
+                _back.Prev.Next = null;
+            _back = _back.Prev;
             size--;
             return item;
         }
@@ -100,10 +114,10 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public T PopFront()
         {
-            var item = First.Value;
-            if (First != Last)
-                First.Next.Prev = null;
-            First = First.Next;
+            var item = _front.Value;
+            if (_front != _back)
+                _front.Next.Prev = null;
+            _front = _front.Next;
             size--;
             return item;
         }
