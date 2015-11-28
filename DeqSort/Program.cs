@@ -32,7 +32,7 @@ namespace DeqSort
         /// <summary>
         /// Пуста ли дека
         /// </summary>
-        public bool Empty { get { return size > 0; } }
+        public bool Empty { get { return size == 0; } }
 
         /// <summary>
         /// Посмотреть на элемент в начале деки
