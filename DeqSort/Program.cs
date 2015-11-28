@@ -137,6 +137,10 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public T GetDeqElementByPosition(int position)
         {
+            if (position < 0 || position >= _size) throw new IndexOutOfRangeException();
+            if(Count == 1)
+                return PopBack();
+
             for (var i = 0; i <= position; i++)
                 PushBack(PopFront());
 
@@ -154,6 +158,16 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public void SetDeqElementByPosition(int position, T value)
         {
+            if (position < 0 || position > _size) throw new IndexOutOfRangeException();
+            if (Empty) {
+                PushBack(value);
+                return;
+            }
+            if (position == Count) {
+                PushFront(value);
+                return;
+            }
+
             for (var i = 0; i <= position; i++)
                 PushBack(PopFront());
 

@@ -129,7 +129,7 @@ namespace Test.DeqSort
 
             d.SetDeqElementByPosition(0, 1);
             d.SetDeqElementByPosition(1, 2);
-            d.SetDeqElementByPosition(3, 3);
+            d.SetDeqElementByPosition(2, 3);
 
             Assert.IsFalse(d.Empty);
             Assert.AreEqual(3, d.Count);
