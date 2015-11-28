@@ -87,6 +87,7 @@ namespace Test.DeqSort
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void TestEmptySetDeqElementByPosition0()
         {
             const int val = 100;
@@ -94,12 +95,6 @@ namespace Test.DeqSort
             var d = new Deq<int>();
 
             d.SetDeqElementByPosition(0, val);
-
-            Assert.IsTrue(d.Count == 1);
-            Assert.IsFalse(d.Empty);
-            Assert.AreEqual(val, d.Back);
-            Assert.AreEqual(val, d.Front);
-            Assert.AreEqual(val, d.GetDeqElementByPosition(0));
         }
 
         [TestMethod]
@@ -123,16 +118,17 @@ namespace Test.DeqSort
         }
 
         [TestMethod]
-        public void TestSetDeqElementByPositionCount()
+        public void TestSetDeqElementByPosition()
         {
             var d = new Deq<int>();
 
-            d.SetDeqElementByPosition(0, 1);
-            d.SetDeqElementByPosition(1, 2);
-            d.SetDeqElementByPosition(2, 3);
+            d.PushFront(1);
+            d.SetDeqElementByPosition(0, 2);
 
             Assert.IsFalse(d.Empty);
-            Assert.AreEqual(3, d.Count);
+            Assert.AreEqual(1, d.Count);
+            Assert.AreEqual(2, d.GetDeqElementByPosition(0));
+            Assert.AreEqual(2, d.PopFront());
         }
 
 

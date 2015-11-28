@@ -29,5 +29,21 @@ namespace Test.DeqSort
             Assert.AreEqual(val, d.PopBack());
         }
 
+        [TestMethod]
+        public void TestTwoItems()
+        {
+            const int val1 = 100500;
+            const int val2 = 100600;
+            var d = new Deq<int>();
+            d.PushBack(val1);
+            d.PushBack(val2);
+            d = Sorter.Sort(d);
+            Assert.IsFalse(d.Empty);
+
+            Assert.AreEqual(2, d.Count);
+            Assert.AreEqual(val1, d.PopFront());
+            Assert.AreEqual(val2, d.PopFront());
+        }
+        
     }
 }

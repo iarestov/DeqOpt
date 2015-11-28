@@ -10,18 +10,15 @@ namespace DeqSort
 
     internal class Deq<T>
     {
-        private Node<T> _front;
-        private Node<T> _current;
-        private Node<T> _back;
-        private int _size = 0;
+        private readonly Node<T> _head = new Node<T>();
+        private int _size;
 
         /// <summary>
         /// Контруктор
         /// </summary>
         public Deq()
         {
-            _size = 0;
-            _front = _current = _back = null;
+            _head.Next = _head.Prev = _head;
         }
 
         /// <summary>
@@ -32,7 +29,7 @@ namespace DeqSort
         /// <summary>
         /// Пуста ли дека
         /// </summary>
-        public bool Empty { get { return _size == 0; } }
+        public bool Empty { get { return Count == 0; } }
 
         /// <summary>
         /// Посмотреть на элемент в начале деки
@@ -42,8 +39,8 @@ namespace DeqSort
         {
             get
             {
-                if (_front == null) throw new InvalidOperationException();
-                return _front.Value;
+                if (_head.Next == _head) throw new InvalidOperationException();
+                return _head.Next.Value;
             }
         }
 
@@ -55,8 +52,8 @@ namespace DeqSort
         {
             get
             {
-                if (_back == null) throw new InvalidOperationException();
-                return _back.Value;
+                if (_head.Prev == _head) throw new InvalidOperationException();
+                return _head.Prev.Value;
             }
         }
 
@@ -66,31 +63,25 @@ namespace DeqSort
         /// <param name="item">(T)Элемент</param>
         public void PushBack(T item)
         {
-            var node = new Node<T>(item);
-            if (_back == null && _front == null)
-                _back = _front = node;
-            else {
-                node.Prev = _back;
-                _back.Next = node;
-                _back = node;
-            }
+            var node = new Node<T>(item) {Prev = _head.Prev, Next = _head};
+
+            _head.Prev.Next = node;
+            _head.Prev = node;
+
             _size++;
         }
 
         /// <summary>
-        /// Вытянуть элемент с начала деки
+        /// Вставить элемент в начало деки
         /// </summary>
         /// <returns>(T)Элемент</returns>
         public void PushFront(T item)
         {
-            var node = new Node<T>(item);
-            if (_back == null && _front == null)
-                _back = _front = node;
-            else {
-                node.Next = _front;
-                _front.Prev = node;
-                _front = node;
-            }
+            var node = new Node<T>(item) {Next = _head.Next, Prev = _head};
+
+            _head.Next.Prev = node;
+            _head.Next = node;
+
             _size++;
         }
 
@@ -101,9 +92,8 @@ namespace DeqSort
         public T PopBack()
         {
             var item = Back;
-            if (_front != _back)
-                _back.Prev.Next = null;
-            _back = _back.Prev;
+            _head.Prev.Prev.Next = _head;
+            _head.Prev = _head.Prev.Prev;
             _size--;
             return item;
         }
@@ -115,9 +105,8 @@ namespace DeqSort
         public T PopFront()
         {
             var item = Front;
-            if (_front != _back)
-                _front.Next.Prev = null;
-            _front = _front.Next;
+            _head.Next.Next.Prev = _head;
+            _head.Next = _head.Next.Next;
             _size--;
             return item;
         }
@@ -132,31 +121,44 @@ namespace DeqSort
         }
 
         /// <summary>
-        /// Получить элемент деки по номеру
+        /// поиск элемента по индексу, перебираем с начала или к конца, в зависимости от того, что ближе
         /// </summary>
-        /// <returns>(T)Элемент</returns>
-        public T GetDeqElementByPosition(int position)
+        /// <param name="position"></param>
+        /// <returns></returns>
+        private Node<T> FindNodeByPosition(int position)
         {
             if (position < 0 || position >= _size) throw new IndexOutOfRangeException();
 
             var mid = _size / 2;
             Node<T> n;
-            if (position <= mid) {
-                n = _front;
+            if (position <= mid)
+            {
+                n = _head.Next;
 
-                while (position-- > 0) {
+                while (position-- > 0)
+                {
                     n = n.Next;
                 }
-                return n.Value;
+                return n;
             }
 
-            n = _back;
+            n = _head.Prev;
             var val = _size - position;
             while (--val > 0)
             {
                 n = n.Prev;
             }
-            return n.Value;
+
+            return n;
+        }
+
+        /// <summary>
+        /// Получить элемент деки по номеру
+        /// </summary>
+        /// <returns>(T)Элемент</returns>
+        public T GetDeqElementByPosition(int position)
+        {
+            return FindNodeByPosition(position).Value;
         }
 
         /// <summary>
@@ -165,26 +167,8 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public void SetDeqElementByPosition(int position, T value)
         {
-            if (position < 0 || position > _size) throw new IndexOutOfRangeException();
-            if (Empty) {
-                PushBack(value);
-                return;
-            }
-            if (position == Count) {
-                PushFront(value);
-                return;
-            }
-
-            for (var i = 0; i <= position; i++)
-                PushBack(PopFront());
-
-            PopFront();
-            PushFront(value);
-
-            for (var i = 0; i <= position; i++)
-                PushFront(PopBack());
+            FindNodeByPosition(position).Value = value;
         }
-
 
         public override string ToString()
         {
@@ -205,6 +189,11 @@ namespace DeqSort
 
         internal class Node<TValue>
         {
+            public Node()
+            {
+                IsDummy = true;
+            }
+
             public Node(TValue value)
             {
                 Value = value;
@@ -213,6 +202,7 @@ namespace DeqSort
             public TValue Value { get; set; }
             public Node<TValue> Next { get; set; }
             public Node<TValue> Prev { get; set; }
+            public Boolean IsDummy{ get; set; }
         }
     }
 
@@ -225,7 +215,7 @@ namespace DeqSort
         /// <returns>Отсортированная дека Deq<T></returns>
         public static Deq<int> Sort(Deq<int> unsortedArray)
         {
-            for (int i = 1; i < unsortedArray.Count; i++)
+            for (int i = 0; i < unsortedArray.Count; i++)
             {
                 Console.WriteLine("Выполнено " + i + " из " + unsortedArray.Count + "("
                                   + (double)i / (
@@ -236,7 +226,7 @@ namespace DeqSort
 
                 for (var j = i - 1; j >= ins; j--)
                     unsortedArray[j + 1] = unsortedArray[j];
-
+                
                 unsortedArray[ins] = tmp;
             }
 
