@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DeqTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeqSort\DeqSort.csproj">

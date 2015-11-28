@@ -135,21 +135,28 @@ namespace DeqSort
         /// Получить элемент деки по номеру
         /// </summary>
         /// <returns>(T)Элемент</returns>
-        public T GetDeqElementByPosition(int position) 
+        public T GetDeqElementByPosition(int position)
         {
             if (position < 0 || position >= _size) throw new IndexOutOfRangeException();
-            if(Count == 1)
-                return PopBack();
 
-            for (var i = 0; i <= position; i++)
-                PushBack(PopFront());
+            var mid = _size / 2;
+            Node<T> n;
+            if (position <= mid) {
+                n = _front;
 
-            var result = Front;
+                while (position-- > 0) {
+                    n = n.Next;
+                }
+                return n.Value;
+            }
 
-            for (var i = 0; i <= position; i++)
-                PushFront(PopBack());
-
-            return result;
+            n = _back;
+            var val = _size - position;
+            while (--val > 0)
+            {
+                n = n.Prev;
+            }
+            return n.Value;
         }
 
         /// <summary>
@@ -209,73 +216,21 @@ namespace DeqSort
         }
     }
 
-
-    internal class Program
+    internal static class Sorter
     {
-        private static void Main(string[] args)
-        {
-            Console.WriteLine("Программа сортировки бинарной вставкой");
-
-            // Создаём, сортируем и выводим деку
-            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(10))) + "\n");
-
-            // Создаём, сортируем и выводим деку
-            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(100))) + "\n");
-
-            // Создаём, сортируем и выводим деку
-            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(1000))) + "\n");
-
-            // разогрев
-            // в управляемых средах типа Java/.NET надо вызвать все функции до теста чтобы они скомпилировались JIT компилятором
-            Measure(String.Empty, () => BinarySorting(RandomArray(100)), true);
-
-            var deq = RandomArray(1000);
-            
-            // тест
-            Measure("BinarySort", () => BinarySorting(deq));
-
-            // выводим деку
-            Console.WriteLine(deq);
-
-            // Держим окно открытым
-            Console.ReadLine();
-        }
-
-        /// <summary>
-        /// Создаём деку на рандом
-        /// </summary>
-        /// <returns>Deq<int></returns>
-        private static Deq<int> RandomArray(int size)
-        {
-            var rnd = new Random();
-            var deq = new Deq<int>();
-            for (var i = 0; i < size; i++)
-                deq.PushBack(rnd.Next(0, 100));
-
-            return deq;
-        }
-
-
-
-        private static void Measure(string name, Action action, bool silent = false)
-        {
-            Stopwatch stopWatch = Stopwatch.StartNew();
-            action();
-            stopWatch.Stop();
-            if (!silent)
-                Console.WriteLine("{0} заняло {1} милисекунд", name, stopWatch.Elapsed);
-        }
-
         /// <summary>
         /// Сортировать деку
         /// </summary>
         /// <param name="unsortedArray">Не отсортированная дека Deq<T></param>
         /// <returns>Отсортированная дека Deq<T></returns>
-        private static Deq<int> BinarySorting(Deq<int> unsortedArray)
+        public static Deq<int> Sort(Deq<int> unsortedArray)
         {
-            for (var i = 1; i < unsortedArray.Count; i++) {
+            for (int i = 1; i < unsortedArray.Count; i++)
+            {
                 Console.WriteLine("Выполнено " + i + " из " + unsortedArray.Count + "("
-                                  + i / (unsortedArray.Count / 100) + "%)");
+                                  + (double)i / (
+(double)unsortedArray.Count / 100) + "%)");
+
                 var ins = BinarySearch(unsortedArray, 0, i, unsortedArray[i]);
                 var tmp = unsortedArray[i];
 
@@ -309,6 +264,64 @@ namespace DeqSort
                 return BinarySearch(array, low, mid, key);
 
             return mid;
+        }
+    }
+
+
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            Console.WriteLine("Программа сортировки бинарной вставкой");
+
+            // Создаём, сортируем и выводим деку
+            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(10))) + "\n");
+
+            // Создаём, сортируем и выводим деку
+            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(100))) + "\n");
+
+            // Создаём, сортируем и выводим деку
+            //Console.WriteLine(PrintArray(BinarySorting(RandomArray(1000))) + "\n");
+
+            // разогрев
+            // в управляемых средах типа Java/.NET надо вызвать все функции до теста чтобы они скомпилировались JIT компилятором
+            Measure(String.Empty, () => Sorter.Sort(RandomArray(100)), true);
+
+            var deq = RandomArray(1000);
+            
+            // тест
+            Measure("BinarySort", () => Sorter.Sort(deq));
+
+            // выводим деку
+            Console.WriteLine(deq);
+
+            // Держим окно открытым
+            Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Создаём деку на рандом
+        /// </summary>
+        /// <returns>Deq<int></returns>
+        private static Deq<int> RandomArray(int size)
+        {
+            var rnd = new Random();
+            var deq = new Deq<int>();
+            for (var i = 0; i < size; i++)
+                deq.PushBack(rnd.Next(0, 100));
+
+            return deq;
+        }
+
+
+
+        private static void Measure(string name, Action action, bool silent = false)
+        {
+            Stopwatch stopWatch = Stopwatch.StartNew();
+            action();
+            stopWatch.Stop();
+            if (!silent)
+                Console.WriteLine("{0} заняло {1} милисекунд", name, stopWatch.Elapsed);
         }
     }
 }

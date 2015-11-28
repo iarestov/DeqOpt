@@ -316,5 +316,37 @@ namespace Test.DeqSort
             Assert.AreEqual(2, d.PopBack());
             Assert.AreEqual(1, d.PopBack());
         }
+
+        [TestMethod]
+        public void TestPushBackGetByPos()
+        {
+            var d = new Deq<int>();
+
+            d.PushBack(1);
+            d.PushBack(2);
+            d.PushBack(3);
+            d.PushBack(4);
+
+            Assert.AreEqual(1, d.GetDeqElementByPosition(0));
+            Assert.AreEqual(2, d.GetDeqElementByPosition(1));
+            Assert.AreEqual(3, d.GetDeqElementByPosition(2));
+            Assert.AreEqual(4, d.GetDeqElementByPosition(3));
+        }
+
+        [TestMethod]
+        public void TestPushFrontGetByPos()
+        {
+            var d = new Deq<int>();
+
+            d.PushFront(1);
+            d.PushFront(2);
+            d.PushFront(3);
+            d.PushFront(4);
+
+            Assert.AreEqual(4, d.GetDeqElementByPosition(0));
+            Assert.AreEqual(3, d.GetDeqElementByPosition(1));
+            Assert.AreEqual(2, d.GetDeqElementByPosition(2));
+            Assert.AreEqual(1, d.GetDeqElementByPosition(3));
+        }
     }
 }
