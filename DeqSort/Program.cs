@@ -100,7 +100,7 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public T PopBack()
         {
-            var item = _back.Value;
+            var item = Back;
             if (_front != _back)
                 _back.Prev.Next = null;
             _back = _back.Prev;
@@ -114,7 +114,7 @@ namespace DeqSort
         /// <returns>(T)Элемент</returns>
         public T PopFront()
         {
-            var item = _front.Value;
+            var item = Front;
             if (_front != _back)
                 _front.Next.Prev = null;
             _front = _front.Next;
