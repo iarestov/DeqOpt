@@ -194,7 +194,6 @@ namespace DeqSort
         {
             public Node()
             {
-                IsDummy = true;
             }
 
             public Node(TValue value)
@@ -205,7 +204,6 @@ namespace DeqSort
             public TValue Value { get; set; }
             public Node<TValue> Next { get; set; }
             public Node<TValue> Prev { get; set; }
-            public Boolean IsDummy{ get; set; }
         }
     }
 
